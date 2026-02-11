@@ -1,7 +1,7 @@
 <Window x:Class="TaskbarStats.SettingsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Taskbar Stats Settings" Height="500" Width="320"
+        Title="Taskbar Stats Settings" SizeToContent="Height" Width="340"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         Background="#2D2D30">
     <Window.Resources>
@@ -29,70 +29,76 @@
         </Style>
     </Window.Resources>
     
-    <Grid Margin="10">
+    <Grid Margin="15">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <StackPanel>
-                <GroupBox Header="General Appearance">
-                    <StackPanel>
-                        <Grid Margin="0,2">
-                            <TextBlock Text="Background Color:"/>
-                            <Button x:Name="BtnBgColor" Style="{StaticResource ColorButtonStyle}" Click="ColorButton_Click"/>
-                        </Grid>
-                        
-                        <Grid Margin="0,2">
-                            <TextBlock Text="Text Color:"/>
-                            <Button x:Name="BtnTextColor" Style="{StaticResource ColorButtonStyle}" Click="ColorButton_Click"/>
-                        </Grid>
-                    </StackPanel>
-                </GroupBox>
+        <StackPanel Grid.Row="0">
+            <GroupBox Header="General" Margin="0,0,0,10">
+                <StackPanel>
+                    <Grid Margin="0,4">
+                        <TextBlock Text="Background Color:"/>
+                        <Button x:Name="BtnBgColor" Style="{StaticResource ColorButtonStyle}" Click="ColorButton_Click"/>
+                    </Grid>
+                    
+                    <Grid Margin="0,4">
+                        <TextBlock Text="Text Color:"/>
+                        <Button x:Name="BtnTextColor" Style="{StaticResource ColorButtonStyle}" Click="ColorButton_Click"/>
+                    </Grid>
+                </StackPanel>
+            </GroupBox>
 
-                <GroupBox Header="Temperature Colors &amp; Thresholds">
-                    <StackPanel>
-                        <TextBlock Text="Warning Threshold (°C):"/>
-                        <TextBox x:Name="TxtCpuWarn" />
-                        
-                        <Grid Margin="0,2">
-                            <TextBlock Text="Warning Color:"/>
-                            <Button x:Name="BtnColorWarn" Style="{StaticResource ColorButtonStyle}" Click="ColorButton_Click"/>
-                        </Grid>
+            <GroupBox Header="Thresholds &amp; Colors" Margin="0,0,0,10">
+                <StackPanel>
+                    <Grid Margin="0,4">
+                        <TextBlock Text="Warning Text Color:" VerticalAlignment="Center"/>
+                        <Button x:Name="BtnColorWarn" Style="{StaticResource ColorButtonStyle}" Click="ColorButton_Click"/>
+                    </Grid>
+                    <Grid Margin="0,0,0,4">
+                         <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Trigger at (°C): " VerticalAlignment="Center"/>
+                            <TextBox x:Name="TxtCpuWarn" Width="50" HorizontalAlignment="Left"/>
+                        </StackPanel>
+                    </Grid>
 
-                        <TextBlock Text="Critical Threshold (°C):"/>
-                        <TextBox x:Name="TxtCpuCrit" />
-                        
-                        <Grid Margin="0,2">
-                            <TextBlock Text="Critical Color:"/>
-                            <Button x:Name="BtnColorCrit" Style="{StaticResource ColorButtonStyle}" Click="ColorButton_Click"/>
-                        </Grid>
-                    </StackPanel>
-                </GroupBox>
+                    <Separator Margin="0,5" Background="#444"/>
 
-                <GroupBox Header="Tray Icon Settings">
-                    <StackPanel>
-                        <Grid Margin="0,2">
-                            <TextBlock Text="CPU Label Color:"/>
-                            <Button x:Name="BtnTrayCpuLabel" Style="{StaticResource ColorButtonStyle}" Click="ColorButton_Click"/>
-                        </Grid>
-                        <Grid Margin="0,2">
-                            <TextBlock Text="GPU Label Color:"/>
-                            <Button x:Name="BtnTrayGpuLabel" Style="{StaticResource ColorButtonStyle}" Click="ColorButton_Click"/>
-                        </Grid>
-                        <Grid Margin="0,2">
-                            <TextBlock Text="Value Text Color:"/>
-                            <Button x:Name="BtnTrayText" Style="{StaticResource ColorButtonStyle}" Click="ColorButton_Click"/>
-                        </Grid>
-                    </StackPanel>
-                </GroupBox>
-            </StackPanel>
-        </ScrollViewer>
+                    <Grid Margin="0,4">
+                         <TextBlock Text="Critical Text Color:" VerticalAlignment="Center"/>
+                         <Button x:Name="BtnColorCrit" Style="{StaticResource ColorButtonStyle}" Click="ColorButton_Click"/>
+                    </Grid>
+                    <Grid Margin="0,0,0,4">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Trigger at (°C): " VerticalAlignment="Center"/>
+                            <TextBox x:Name="TxtCpuCrit" Width="50" HorizontalAlignment="Left"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </GroupBox>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-            <Button Content="Save" Width="70" Height="25" Margin="0,0,10,0" Click="BtnSave_Click"/>
-            <Button Content="Cancel" Width="70" Height="25" Click="BtnCancel_Click"/>
+            <GroupBox Header="Tray Icon" Margin="0,0,0,10">
+                <StackPanel>
+                    <Grid Margin="0,4">
+                        <TextBlock Text="CPU Label Color:"/>
+                        <Button x:Name="BtnTrayCpuLabel" Style="{StaticResource ColorButtonStyle}" Click="ColorButton_Click"/>
+                    </Grid>
+                    <Grid Margin="0,4">
+                        <TextBlock Text="GPU Label Color:"/>
+                        <Button x:Name="BtnTrayGpuLabel" Style="{StaticResource ColorButtonStyle}" Click="ColorButton_Click"/>
+                    </Grid>
+                    <Grid Margin="0,4">
+                        <TextBlock Text="Value Color:"/>
+                        <Button x:Name="BtnTrayText" Style="{StaticResource ColorButtonStyle}" Click="ColorButton_Click"/>
+                    </Grid>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0">
+            <Button Content="Save" Width="80" Height="28" Margin="0,0,10,0" Click="BtnSave_Click"/>
+            <Button Content="Cancel" Width="80" Height="28" Click="BtnCancel_Click"/>
         </StackPanel>
     </Grid>
 </Window>
