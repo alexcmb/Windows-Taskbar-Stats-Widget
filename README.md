@@ -2,9 +2,9 @@
 
 A lightweight, minimalist, and highly customizable widget for Windows 10/11 that displays CPU and GPU temperatures directly above your taskbar.
 
-## 🌟 Features
+## Features
 
-### 🖥️ Core Functionality
+### Core Functionality
 *   **Real-time Monitoring**: Polls hardware sensors every second (CPU & GPU).
 *   **Minimalist Overlay**: Designed to sit unobtrusively above the taskbar.
 *   **Always on Top**: Detects full-screen applications (games) and forces itself to remain visible.
@@ -12,7 +12,7 @@ A lightweight, minimalist, and highly customizable widget for Windows 10/11 that
     *   **Draggable**: Hold `Left Click` to move it anywhere.
     *   **Auto-Recovery**: Automatically resets position if it detects it's off-screen (e.g., during RDP sessions or resolution changes).
 
-### 🎨 Customization (New!)
+### Customization 
 *   **Unified Color System**: A single "Text Color" setting controls all text labels and normal temperature values for a clean look.
 *   **Dynamic Alerts**: Visual feedback when temperatures rise:
     *   **Normal**: Uses your custom text color.
@@ -21,7 +21,7 @@ A lightweight, minimalist, and highly customizable widget for Windows 10/11 that
 *   **Background Control**: Adjust the background color and transparency to match your desktop theme.
 *   **Opacity**: Scroll `Mouse Wheel` over the widget to fade it in/out instantly.
 
-### 🔔 System Tray Integration
+### System Tray Integration
 *   **Live Icon**: The tray icon dynamically updates to show the current temperature.
 *   **Context Menu**: Right-click the tray icon to:
     *   Open **Settings** to configure colors and thresholds.
@@ -30,7 +30,7 @@ A lightweight, minimalist, and highly customizable widget for Windows 10/11 that
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 *   **Windows 10 or 11**
@@ -44,7 +44,7 @@ A lightweight, minimalist, and highly customizable widget for Windows 10/11 that
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 Right-click the **Tray Icon** and select **Settings** to customize:
 
@@ -59,7 +59,7 @@ Right-click the **Tray Icon** and select **Settings** to customize:
 
 ---
 
-## 🛠️ Troubleshooting
+## Troubleshooting
 
 ### Widget is not visible?
 *   **Check the Tray**: Is the icon running? If yes, right-click and check settings.
@@ -72,7 +72,7 @@ Right-click the **Tray Icon** and select **Settings** to customize:
 
 ---
 
-## 🏗️ How to Build
+## How to Build
 
 1.  Open a terminal in the project directory.
 2.  Run the build command:
