@@ -1,0 +1,29 @@
+# Build Results
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio / VS Code
+.vs/
+.vscode/
+
+# User-specific files
+*.user
+*.userosscache
+*.sln.docstates
+
+# Secrets / Config
+*.key
+
+# Temp files
+*.log
+monitor_log.txt
+config.json
+
+# OS Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Backup
+Backup/

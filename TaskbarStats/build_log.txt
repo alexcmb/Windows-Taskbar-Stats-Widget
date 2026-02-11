@@ -1,0 +1,27 @@
+  Identification des projets à restaurer...
+  Tous les projets sont à jour pour la restauration.
+D:\Documents\WidgetCPUGPU\TaskbarStats\SettingsWindow.xaml.cs(42,30): error CS0104: 'Brush' est une référence ambiguë entre 'System.Drawing.Brush' et 'System.Windows.Media.Brush' [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+D:\Documents\WidgetCPUGPU\TaskbarStats\SettingsWindow.xaml.cs(48,34): error CS0104: 'Brushes' est une référence ambiguë entre 'System.Drawing.Brushes' et 'System.Windows.Media.Brushes' [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+D:\Documents\WidgetCPUGPU\TaskbarStats\MainWindow.xaml.cs(85,26): warning CS8600: Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable. [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+D:\Documents\WidgetCPUGPU\TaskbarStats\MainWindow.xaml.cs(154,34): warning CS8600: Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable. [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+D:\Documents\WidgetCPUGPU\TaskbarStats\MainWindow.xaml.cs(154,34): warning CS8603: Existence possible d'un retour de référence null. [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+D:\Documents\WidgetCPUGPU\TaskbarStats\MainWindow.xaml.cs(155,34): warning CS8600: Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable. [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+D:\Documents\WidgetCPUGPU\TaskbarStats\MainWindow.xaml.cs(155,34): warning CS8603: Existence possible d'un retour de référence null. [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+D:\Documents\WidgetCPUGPU\TaskbarStats\MainWindow.xaml.cs(156,16): warning CS8600: Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable. [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+D:\Documents\WidgetCPUGPU\TaskbarStats\MainWindow.xaml.cs(156,16): warning CS8603: Existence possible d'un retour de référence null. [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+
+ÉCHEC de la build.
+
+D:\Documents\WidgetCPUGPU\TaskbarStats\MainWindow.xaml.cs(85,26): warning CS8600: Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable. [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+D:\Documents\WidgetCPUGPU\TaskbarStats\MainWindow.xaml.cs(154,34): warning CS8600: Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable. [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+D:\Documents\WidgetCPUGPU\TaskbarStats\MainWindow.xaml.cs(154,34): warning CS8603: Existence possible d'un retour de référence null. [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+D:\Documents\WidgetCPUGPU\TaskbarStats\MainWindow.xaml.cs(155,34): warning CS8600: Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable. [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+D:\Documents\WidgetCPUGPU\TaskbarStats\MainWindow.xaml.cs(155,34): warning CS8603: Existence possible d'un retour de référence null. [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+D:\Documents\WidgetCPUGPU\TaskbarStats\MainWindow.xaml.cs(156,16): warning CS8600: Conversion de littéral ayant une valeur null ou d'une éventuelle valeur null en type non-nullable. [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+D:\Documents\WidgetCPUGPU\TaskbarStats\MainWindow.xaml.cs(156,16): warning CS8603: Existence possible d'un retour de référence null. [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+D:\Documents\WidgetCPUGPU\TaskbarStats\SettingsWindow.xaml.cs(42,30): error CS0104: 'Brush' est une référence ambiguë entre 'System.Drawing.Brush' et 'System.Windows.Media.Brush' [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+D:\Documents\WidgetCPUGPU\TaskbarStats\SettingsWindow.xaml.cs(48,34): error CS0104: 'Brushes' est une référence ambiguë entre 'System.Drawing.Brushes' et 'System.Windows.Media.Brushes' [D:\Documents\WidgetCPUGPU\TaskbarStats\TaskbarStats_mvgfn4w5_wpftmp.csproj]
+    7 Avertissement(s)
+    2 Erreur(s)
+
+Temps écoulé 00:00:01.79

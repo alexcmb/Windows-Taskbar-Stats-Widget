@@ -1,0 +1,38 @@
+﻿<Window x:Class="TaskbarStats.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TaskbarStats"
+        mc:Ignorable="d"
+        Title="TaskbarStats" Height="30" Width="200"
+        Icon="monitor.ico"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="#CC000000"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        MouseWheel="Window_MouseWheel">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock x:Name="LblCpu" Text="CPU: "/>
+            <TextBlock x:Name="CpuText" Text="--"/>
+            <TextBlock x:Name="UnitCpu" Text="°C" Margin="0,0,10,0"/>
+
+            <TextBlock x:Name="LblGpu" Text="GPU: "/>
+            <TextBlock x:Name="GpuText" Text="--"/>
+            <TextBlock x:Name="UnitGpu" Text="°C"/>
+        </StackPanel>
+    </Grid>
+</Window>
