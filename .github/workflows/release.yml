@@ -1,9 +1,9 @@
-name: Release Build
+name: Release Build (Portable)
 
 on:
   push:
     tags:
-      - 'v*' # Trigger on version tags, e.g. v1.0.0
+      - 'v*'
 
 permissions:
   contents: write
@@ -20,13 +20,14 @@ jobs:
       with:
         dotnet-version: '10.0.x' 
 
+    # Using multi-file publish to ensure driver/icon dependencies work correctly
     - name: Publish
       run: |
-        dotnet publish TaskbarStats/TaskbarStats.csproj -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish
+        dotnet publish TaskbarStats/TaskbarStats.csproj -c Release -r win-x64 --self-contained -o TaskbarStats-Release
 
     - name: Compress Release
       run: |
-        Compress-Archive -Path publish\* -DestinationPath TaskbarStats.zip
+        Compress-Archive -Path TaskbarStats-Release -DestinationPath TaskbarStats.zip
 
     - name: Create Release
       uses: softprops/action-gh-release@v1

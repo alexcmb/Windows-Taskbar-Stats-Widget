@@ -79,8 +79,8 @@ Right-click the **Tray Icon** and select **Settings** to customize:
     ```powershell
     dotnet build
     ```
-3.  To publish a single-file executable (Release mode):
+3.  To publish a portable release (Recommended):
     ```powershell
-    dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+    dotnet publish -c Release -r win-x64 --self-contained -o TaskbarStats-Release
     ```
-    *Output location: `bin/Release/net10.0-windows/win-x64/publish/`*
+    *The output will be in the `TaskbarStats-Release` folder.*
