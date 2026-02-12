@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace TaskbarStats.Services
 {
@@ -30,7 +31,26 @@ namespace TaskbarStats.Services
 
     public static class ConfigService
     {
-        private static readonly string ConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
+        private static readonly string ConfigDir = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "TaskbarStats");
+
+        private static readonly string ConfigPath = Path.Combine(ConfigDir, "config.json");
+
+        // Matches #RGB, #RRGGBB, #AARRGGBB hex color strings
+        private static readonly Regex HexColorRegex = new Regex(
+            @"^#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$",
+            RegexOptions.Compiled);
+
+        /// <summary>
+        /// Validates that a string is a valid hex color. Returns the fallback if invalid.
+        /// </summary>
+        public static string ValidateColor(string? color, string fallback)
+        {
+            if (string.IsNullOrWhiteSpace(color) || !HexColorRegex.IsMatch(color))
+                return fallback;
+            return color;
+        }
 
         public static AppConfig Load()
         {
@@ -41,16 +61,13 @@ namespace TaskbarStats.Services
                     string json = File.ReadAllText(ConfigPath);
                     var config = JsonSerializer.Deserialize<AppConfig>(json) ?? new AppConfig();
                     
-                    // Validate
-                    if (config.Opacity < 0.1) config.Opacity = 0.1;
-                    if (config.Opacity > 1.0) config.Opacity = 1.0;
-                    
+                    ValidateConfig(config);
                     return config;
                 }
             }
             catch (Exception)
             {
-                // Ignore load errors, return default
+                // Config corrupted or unreadable — return safe defaults
             }
             return new AppConfig();
         }
@@ -59,13 +76,51 @@ namespace TaskbarStats.Services
         {
             try
             {
-                string json = JsonSerializer.Serialize(config);
+                Directory.CreateDirectory(ConfigDir);
+
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                string json = JsonSerializer.Serialize(config, options);
                 File.WriteAllText(ConfigPath, json);
             }
             catch (Exception)
             {
                 // Ignore save errors
             }
+        }
+
+        private static void ValidateConfig(AppConfig config)
+        {
+            var defaults = new AppConfig();
+
+            // Opacity
+            if (config.Opacity < 0.1) config.Opacity = 0.1;
+            if (config.Opacity > 1.0) config.Opacity = 1.0;
+
+            // Thresholds: clamp to sane range and ensure warning < critical
+            config.CpuWarningThreshold = Math.Clamp(config.CpuWarningThreshold, 30, 120);
+            config.CpuCriticalThreshold = Math.Clamp(config.CpuCriticalThreshold, 30, 120);
+            if (config.CpuWarningThreshold >= config.CpuCriticalThreshold)
+            {
+                config.CpuWarningThreshold = defaults.CpuWarningThreshold;
+                config.CpuCriticalThreshold = defaults.CpuCriticalThreshold;
+            }
+
+            config.GpuWarningThreshold = Math.Clamp(config.GpuWarningThreshold, 30, 120);
+            config.GpuCriticalThreshold = Math.Clamp(config.GpuCriticalThreshold, 30, 120);
+            if (config.GpuWarningThreshold >= config.GpuCriticalThreshold)
+            {
+                config.GpuWarningThreshold = defaults.GpuWarningThreshold;
+                config.GpuCriticalThreshold = defaults.GpuCriticalThreshold;
+            }
+
+            // Colors: validate hex format, fallback to defaults
+            config.BackgroundColor = ValidateColor(config.BackgroundColor, defaults.BackgroundColor);
+            config.TextColor = ValidateColor(config.TextColor, defaults.TextColor);
+            config.ColorWarning = ValidateColor(config.ColorWarning, defaults.ColorWarning);
+            config.ColorCritical = ValidateColor(config.ColorCritical, defaults.ColorCritical);
+            config.TrayCpuLabelColor = ValidateColor(config.TrayCpuLabelColor, defaults.TrayCpuLabelColor);
+            config.TrayGpuLabelColor = ValidateColor(config.TrayGpuLabelColor, defaults.TrayGpuLabelColor);
+            config.TrayTextColor = ValidateColor(config.TrayTextColor, defaults.TrayTextColor);
         }
     }
 }

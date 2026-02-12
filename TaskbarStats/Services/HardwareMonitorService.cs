@@ -9,9 +9,32 @@ using TaskbarStats.Models;
 
 namespace TaskbarStats.Services
 {
+    /// <summary>
+    /// Visitor that calls Update() on all hardware and sub-hardware.
+    /// This is the recommended pattern for LibreHardwareMonitor.
+    /// </summary>
+    internal sealed class UpdateVisitor : IVisitor
+    {
+        public void VisitComputer(IComputer computer)
+        {
+            computer.Traverse(this);
+        }
+
+        public void VisitHardware(IHardware hardware)
+        {
+            hardware.Update();
+            foreach (var sub in hardware.SubHardware)
+                sub.Accept(this);
+        }
+
+        public void VisitSensor(ISensor sensor) { }
+        public void VisitParameter(IParameter parameter) { }
+    }
+
     public class HardwareMonitorService : IDisposable
     {
         private Computer? _computer;
+        private readonly UpdateVisitor _visitor = new UpdateVisitor();
         private readonly Queue<float> _cpuTempHistory = new Queue<float>();
         private readonly Queue<float> _gpuTempHistory = new Queue<float>();
         private const int HistoryLength = 5;
@@ -19,6 +42,7 @@ namespace TaskbarStats.Services
         private Task? _pollingTask;
         private int _consecutiveErrors = 0;
         private const int MaxConsecutiveErrors = 3;
+        private bool _disposed;
 
         public event Action<TemperatureData>? OnDataUpdated;
 
@@ -67,6 +91,8 @@ namespace TaskbarStats.Services
         {
             _cts?.Cancel();
             try { _pollingTask?.Wait(2000); } catch { }
+            _cts?.Dispose();
+            _cts = null;
             CloseComputer();
         }
 
@@ -83,17 +109,18 @@ namespace TaskbarStats.Services
                     
                     if (_computer != null)
                     {
+                        // Use the visitor pattern to update all hardware
+                        try
+                        {
+                            _computer.Accept(_visitor);
+                        }
+                        catch
+                        {
+                            // If visitor update fails, continue to try reading cached data
+                        }
+
                         foreach (var hardware in _computer.Hardware)
                         {
-                            try 
-                            {
-                                hardware.Update();
-                            }
-                            catch 
-                            { 
-                                continue; 
-                            }
-
                             if (hardware.HardwareType == HardwareType.Cpu)
                             {
                                 var tempSensor = hardware.Sensors.FirstOrDefault(s => s.SensorType == SensorType.Temperature && s.Name.Contains("Package")) 
@@ -155,10 +182,10 @@ namespace TaskbarStats.Services
             return history.Average();
         }
 
-
-
         public void Dispose()
         {
+            if (_disposed) return;
+            _disposed = true;
             Stop();
         }
     }

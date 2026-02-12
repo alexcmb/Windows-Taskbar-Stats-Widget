@@ -22,7 +22,6 @@ public partial class MainWindow : Window
     private const uint SWP_NOSIZE = 0x0001;
     private const uint SWP_NOMOVE = 0x0002;
     private const uint SWP_NOACTIVATE = 0x0010;
-    private const uint SWP_SHOWWINDOW = 0x0040;
 
     public MainWindow(HardwareMonitorService service)
     {
@@ -32,7 +31,6 @@ public partial class MainWindow : Window
         
         LoadConfig();
         
-        // Load Config (for position and opacity)
         // Load Config (for position and opacity)
         var config = ConfigService.Load();
         
@@ -72,12 +70,12 @@ public partial class MainWindow : Window
 
         this.Closing += (s, e) => 
         {
-            ConfigService.Save(new AppConfig 
-            {
-                Top = this.Top,
-                Left = this.Left,
-                Opacity = this.Opacity
-            });
+            // Merge position/opacity into existing config instead of overwriting
+            var currentConfig = ConfigService.Load();
+            currentConfig.Top = this.Top;
+            currentConfig.Left = this.Left;
+            currentConfig.Opacity = this.Opacity;
+            ConfigService.Save(currentConfig);
         };
     }
 
@@ -109,7 +107,16 @@ public partial class MainWindow : Window
             LblGpu.Foreground = textBrush;
             UnitGpu.Foreground = textBrush;
         }
-        catch { }
+        catch
+        {
+            // Fall back to safe defaults if color parsing fails
+            Background = new SolidColorBrush(Color.FromArgb(0xCC, 0x00, 0x00, 0x00));
+            var whiteBrush = System.Windows.Media.Brushes.White;
+            LblCpu.Foreground = whiteBrush;
+            UnitCpu.Foreground = whiteBrush;
+            LblGpu.Foreground = whiteBrush;
+            UnitGpu.Foreground = whiteBrush;
+        }
     }
 
     private void UpdateStats(TemperatureData data)
@@ -148,7 +155,7 @@ public partial class MainWindow : Window
     private void ForceTopmost()
     {
         var handle = new WindowInteropHelper(this).Handle;
-        SetWindowPos(handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
+        SetWindowPos(handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
     }
 
     // P/Invoke for Window Styles
@@ -173,8 +180,18 @@ public partial class MainWindow : Window
     private System.Windows.Media.Brush GetColorForTemp(float temp, int warn, int crit, AppConfig config)
     {
         var converter = new BrushConverter();
-        if (temp >= crit) return (System.Windows.Media.Brush)converter.ConvertFromString(config.ColorCritical);
-        if (temp >= warn) return (System.Windows.Media.Brush)converter.ConvertFromString(config.ColorWarning);
-        return (System.Windows.Media.Brush)converter.ConvertFromString(config.TextColor);
+        try
+        {
+            if (temp >= crit) return (System.Windows.Media.Brush)converter.ConvertFromString(config.ColorCritical);
+            if (temp >= warn) return (System.Windows.Media.Brush)converter.ConvertFromString(config.ColorWarning);
+            return (System.Windows.Media.Brush)converter.ConvertFromString(config.TextColor);
+        }
+        catch
+        {
+            // Fall back to safe defaults
+            if (temp >= crit) return System.Windows.Media.Brushes.Red;
+            if (temp >= warn) return System.Windows.Media.Brushes.Orange;
+            return System.Windows.Media.Brushes.White;
+        }
     }
 }
