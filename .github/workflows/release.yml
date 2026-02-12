@@ -22,11 +22,11 @@ jobs:
 
     - name: Publish
       run: |
-        dotnet publish TaskbarStats/TaskbarStats.csproj -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=none -o TaskbarStats-Release
+        dotnet publish TaskbarStats/TaskbarStats.csproj -c Release -r win-x64 --self-contained -p:DebugType=none -o TaskbarStats-Release
 
     - name: Compress Release
       run: |
-        Compress-Archive -Path TaskbarStats-Release/* -DestinationPath TaskbarStats.zip
+        Compress-Archive -Path TaskbarStats-Release -DestinationPath TaskbarStats.zip
 
     - name: Create Release
       uses: softprops/action-gh-release@v1
