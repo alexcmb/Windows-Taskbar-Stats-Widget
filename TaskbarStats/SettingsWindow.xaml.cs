@@ -38,7 +38,7 @@ namespace TaskbarStats
             try
             {
                 var converter = new BrushConverter();
-                var brush = (System.Windows.Media.Brush)converter.ConvertFromString(hexColor);
+                var brush = (System.Windows.Media.Brush?)converter.ConvertFromString(hexColor) ?? System.Windows.Media.Brushes.White;
                 btn.Background = brush;
                 btn.Tag = hexColor; // Store hex in Tag for easy retrieval
             }
