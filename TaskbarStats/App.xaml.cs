@@ -15,6 +15,7 @@ public partial class App : Application
     private MainWindow? _mainWindow;
     private bool _isWidgetVisible = true;
     private int _trayUpdateCounter = 0;
+    private bool _isExiting;
 
     private static Mutex? _mutex;
 
@@ -103,9 +104,16 @@ public partial class App : Application
         if (_notifyIcon == null) return;
 
         var config = ConfigService.Load();
-        Color cpuLabelColor = ColorTranslator.FromHtml(config.TrayCpuLabelColor);
-        Color gpuLabelColor = ColorTranslator.FromHtml(config.TrayGpuLabelColor);
-        Color textColor = ColorTranslator.FromHtml(config.TrayTextColor);
+        Color cpuLabelColor, gpuLabelColor, textColor;
+
+        try { cpuLabelColor = ColorTranslator.FromHtml(config.TrayCpuLabelColor); }
+        catch { cpuLabelColor = Color.Red; }
+
+        try { gpuLabelColor = ColorTranslator.FromHtml(config.TrayGpuLabelColor); }
+        catch { gpuLabelColor = Color.Orange; }
+
+        try { textColor = ColorTranslator.FromHtml(config.TrayTextColor); }
+        catch { textColor = Color.White; }
 
         // Update Tooltip
         string cpuStr = data.CpuTemp.HasValue ? $"{data.CpuTemp.Value:F0}°C" : "--";
@@ -123,8 +131,6 @@ public partial class App : Application
         using (var bitmap = new Bitmap(16, 16))
         using (var g = Graphics.FromImage(bitmap))
         {
-            // g.Clear(Color.Transparent); 
-            
             using (var font = new Font("Tahoma", 7, System.Drawing.FontStyle.Bold)) 
             using (var brush = new SolidBrush(textColor))
             {
@@ -134,16 +140,15 @@ public partial class App : Application
                 {
                     case 0:
                         text = "CPU";
-                        brush.Color = cpuLabelColor; // Label color
+                        brush.Color = cpuLabelColor;
                         break;
                     case 1:
                         text = data.CpuTemp.HasValue ? data.CpuTemp.Value.ToString("F0") : "--";
                         brush.Color = textColor;
-                        // Heat color logic could go here if desired, keep white for now or adaptive
                         break;
                     case 2:
                         text = "GPU";
-                        brush.Color = gpuLabelColor; // Label color
+                        brush.Color = gpuLabelColor;
                         break;
                     case 3:
                         text = data.GpuTemp.HasValue ? data.GpuTemp.Value.ToString("F0") : "--";
@@ -152,10 +157,8 @@ public partial class App : Application
                 }
 
                 // Measure and Draw
-                // For 3-letter words like "CPU", might need smaller font or condensed
                 var textSize = g.MeasureString(text, font);
                 
-                // If text is too wide, scale down font slightly?
                 if (textSize.Width > 16)
                 {
                      using (var smallFont = new Font("Tahoma", 6, System.Drawing.FontStyle.Bold))
@@ -201,8 +204,14 @@ public partial class App : Application
 
     private void ExitApplication()
     {
+        if (_isExiting) return;
+        _isExiting = true;
+
         _monitorService?.Dispose();
+        _monitorService = null;
+
         _notifyIcon?.Dispose();
+        _notifyIcon = null;
         
         if (_currentIconHandle != IntPtr.Zero)
         {
@@ -215,8 +224,16 @@ public partial class App : Application
 
     protected override void OnExit(ExitEventArgs e)
     {
-        _monitorService?.Dispose();
-        _notifyIcon?.Dispose();
+        if (!_isExiting)
+        {
+            _monitorService?.Dispose();
+            _notifyIcon?.Dispose();
+        }
+
+        _mutex?.ReleaseMutex();
+        _mutex?.Dispose();
+        _mutex = null;
+
         base.OnExit(e);
     }
 }
