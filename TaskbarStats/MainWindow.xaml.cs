@@ -99,9 +99,9 @@ public partial class MainWindow : Window
         try
         {
             var brushConverter = new BrushConverter();
-            Background = (System.Windows.Media.Brush)brushConverter.ConvertFromString(config.BackgroundColor);
+            Background = (System.Windows.Media.Brush?)brushConverter.ConvertFromString(config.BackgroundColor) ?? new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xCC, 0x00, 0x00, 0x00));
             
-            var textBrush = (System.Windows.Media.Brush)brushConverter.ConvertFromString(config.TextColor);
+            var textBrush = (System.Windows.Media.Brush?)brushConverter.ConvertFromString(config.TextColor) ?? System.Windows.Media.Brushes.White;
             LblCpu.Foreground = textBrush;
             UnitCpu.Foreground = textBrush;
             LblGpu.Foreground = textBrush;
@@ -110,7 +110,7 @@ public partial class MainWindow : Window
         catch
         {
             // Fall back to safe defaults if color parsing fails
-            Background = new SolidColorBrush(Color.FromArgb(0xCC, 0x00, 0x00, 0x00));
+            Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xCC, 0x00, 0x00, 0x00));
             var whiteBrush = System.Windows.Media.Brushes.White;
             LblCpu.Foreground = whiteBrush;
             UnitCpu.Foreground = whiteBrush;
@@ -182,9 +182,9 @@ public partial class MainWindow : Window
         var converter = new BrushConverter();
         try
         {
-            if (temp >= crit) return (System.Windows.Media.Brush)converter.ConvertFromString(config.ColorCritical);
-            if (temp >= warn) return (System.Windows.Media.Brush)converter.ConvertFromString(config.ColorWarning);
-            return (System.Windows.Media.Brush)converter.ConvertFromString(config.TextColor);
+            if (temp >= crit) return (System.Windows.Media.Brush?)converter.ConvertFromString(config.ColorCritical) ?? System.Windows.Media.Brushes.Red;
+            if (temp >= warn) return (System.Windows.Media.Brush?)converter.ConvertFromString(config.ColorWarning) ?? System.Windows.Media.Brushes.Orange;
+            return (System.Windows.Media.Brush?)converter.ConvertFromString(config.TextColor) ?? System.Windows.Media.Brushes.White;
         }
         catch
         {
