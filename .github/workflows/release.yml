@@ -25,6 +25,11 @@ jobs:
       run: |
         dotnet publish TaskbarStats/TaskbarStats.csproj -c Release -r win-x64 --self-contained -o TaskbarStats-Release
 
+    - name: Reorganize Output
+      run: |
+        New-Item -ItemType Directory -Path TaskbarStats-Release/lib -Force
+        Get-ChildItem TaskbarStats-Release -Filter *.dll | Move-Item -Destination TaskbarStats-Release/lib/
+
     - name: Compress Release
       run: |
         Compress-Archive -Path TaskbarStats-Release -DestinationPath TaskbarStats.zip
