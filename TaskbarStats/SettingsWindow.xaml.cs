@@ -31,6 +31,29 @@ namespace TaskbarStats
             SetButtonColor(BtnTrayCpuLabel, _currentConfig.TrayCpuLabelColor);
             SetButtonColor(BtnTrayGpuLabel, _currentConfig.TrayGpuLabelColor);
             SetButtonColor(BtnTrayText, _currentConfig.TrayTextColor);
+
+            // Check registry for auto-start
+            try
+            {
+                using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", false))
+                {
+                    if (key != null)
+                    {
+                        var value = key.GetValue("TaskbarStatsWidget");
+                        if (value != null)
+                        {
+                            ChkStartWithWindows.IsChecked = true;
+                            _currentConfig.StartWithWindows = true;
+                        }
+                        else
+                        {
+                            ChkStartWithWindows.IsChecked = false;
+                            _currentConfig.StartWithWindows = false;
+                        }
+                    }
+                }
+            }
+            catch { } // Ignore registry access errors
         }
 
         private void SetButtonColor(System.Windows.Controls.Button btn, string hexColor)
@@ -95,6 +118,33 @@ namespace TaskbarStats
                 _currentConfig.TrayCpuLabelColor = (string)BtnTrayCpuLabel.Tag;
                 _currentConfig.TrayGpuLabelColor = (string)BtnTrayGpuLabel.Tag;
                 _currentConfig.TrayTextColor = (string)BtnTrayText.Tag;
+
+                _currentConfig.StartWithWindows = ChkStartWithWindows.IsChecked ?? false;
+
+                // Update Registry
+                try
+                {
+                    using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true))
+                    {
+                        if (key != null)
+                        {
+                            if (_currentConfig.StartWithWindows)
+                            {
+                                // Point to current executable
+                                string exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+                                key.SetValue("TaskbarStatsWidget", $"\"{exePath}\"");
+                            }
+                            else
+                            {
+                                key.DeleteValue("TaskbarStatsWidget", false);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show($"Error updating registry: {ex.Message}", "Registry Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
 
                 ConfigService.Save(_currentConfig);
                 

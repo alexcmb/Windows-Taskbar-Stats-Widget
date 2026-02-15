@@ -10,6 +10,7 @@ namespace TaskbarStats.Services
         public double Top { get; set; } = -1;
         public double Left { get; set; } = -1;
         public double Opacity { get; set; } = 1.0;
+        public bool StartWithWindows { get; set; } = false;
         
         // Colors
         public string BackgroundColor { get; set; } = "#CC000000"; // Default: Dark transparent

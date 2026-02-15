@@ -42,6 +42,11 @@
                         <TextBlock Text="Background Color:"/>
                         <Button x:Name="BtnBgColor" Style="{StaticResource ColorButtonStyle}" Click="ColorButton_Click"/>
                     </Grid>
+
+                    <Grid Margin="0,4">
+                        <TextBlock Text="Start with Windows:"/>
+                        <CheckBox x:Name="ChkStartWithWindows" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,5"/>
+                    </Grid>
                     
                     <Grid Margin="0,4">
                         <TextBlock Text="Text Color:"/>
