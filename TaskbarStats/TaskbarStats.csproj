@@ -13,6 +13,7 @@
     <Copyright>Copyright © 2026</Copyright>
     <Version>1.0.3</Version>
     <ApplicationIcon>monitor.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
