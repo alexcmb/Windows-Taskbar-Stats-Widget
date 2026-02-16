@@ -72,6 +72,25 @@ Right-click the **Tray Icon** and select **Settings** to customize:
 
 ---
 
+## Security
+
+### Administrator Privileges
+This application requires **Administrator** privileges to function. This is necessary because it relies on `LibreHardwareMonitorLib`, which uses a kernel-mode driver (Ring0) to read data directly from physical hardware sensors (CPU/GPU).
+*   **Why?** Windows restricts access to hardware sensors for standard users.
+*   **Safety**: The application does not perform any network operations (except for optional updates if configured) and does not collect or transmit personal data.
+
+### Data Privacy
+*   **Local Processing**: All temperature data is processed locally in RAM.
+*   **No Telemetry**: No usage data or statistics are sent to external servers.
+*   **Configuration**: Settings are stored locally in `%LocalAppData%\TaskbarStats\config.json`.
+
+### Build Security
+The project includes automated security checks in its GitHub pipeline:
+*   **CodeQL**: Automatically scans the C# codebase for potential vulnerabilities on every push.
+*   **Dependency Review**: Checks all pull requests to ensure no vulnerable dependencies are introduced.
+
+---
+
 ## How to Build
 
 1.  Open a terminal in the project directory.
