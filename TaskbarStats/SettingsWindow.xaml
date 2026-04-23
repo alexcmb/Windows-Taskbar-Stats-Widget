@@ -62,9 +62,15 @@
                         <Button x:Name="BtnColorWarn" Style="{StaticResource ColorButtonStyle}" Click="ColorButton_Click"/>
                     </Grid>
                     <Grid Margin="0,0,0,4">
-                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Trigger at (°C): " VerticalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="CPU trigger (°C): " VerticalAlignment="Center"/>
                             <TextBox x:Name="TxtCpuWarn" Width="50" HorizontalAlignment="Left"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Margin="0,0,0,4">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="GPU trigger (°C): " VerticalAlignment="Center"/>
+                            <TextBox x:Name="TxtGpuWarn" Width="50" HorizontalAlignment="Left"/>
                         </StackPanel>
                     </Grid>
 
@@ -76,8 +82,14 @@
                     </Grid>
                     <Grid Margin="0,0,0,4">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Trigger at (°C): " VerticalAlignment="Center"/>
+                            <TextBlock Text="CPU trigger (°C): " VerticalAlignment="Center"/>
                             <TextBox x:Name="TxtCpuCrit" Width="50" HorizontalAlignment="Left"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Margin="0,0,0,4">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="GPU trigger (°C): " VerticalAlignment="Center"/>
+                            <TextBox x:Name="TxtGpuCrit" Width="50" HorizontalAlignment="Left"/>
                         </StackPanel>
                     </Grid>
                 </StackPanel>

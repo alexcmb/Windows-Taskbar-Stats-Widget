@@ -27,6 +27,8 @@ namespace TaskbarStats
 
             TxtCpuWarn.Text = _currentConfig.CpuWarningThreshold.ToString();
             TxtCpuCrit.Text = _currentConfig.CpuCriticalThreshold.ToString();
+            TxtGpuWarn.Text = _currentConfig.GpuWarningThreshold.ToString();
+            TxtGpuCrit.Text = _currentConfig.GpuCriticalThreshold.ToString();
 
             SetButtonColor(BtnTrayCpuLabel, _currentConfig.TrayCpuLabelColor);
             SetButtonColor(BtnTrayGpuLabel, _currentConfig.TrayGpuLabelColor);
@@ -111,9 +113,8 @@ namespace TaskbarStats
 
                 if (int.TryParse(TxtCpuWarn.Text, out int cpuWarn)) _currentConfig.CpuWarningThreshold = cpuWarn;
                 if (int.TryParse(TxtCpuCrit.Text, out int cpuCrit)) _currentConfig.CpuCriticalThreshold = cpuCrit;
-                
-                _currentConfig.GpuWarningThreshold = _currentConfig.CpuWarningThreshold;
-                _currentConfig.GpuCriticalThreshold = _currentConfig.CpuCriticalThreshold;
+                if (int.TryParse(TxtGpuWarn.Text, out int gpuWarn)) _currentConfig.GpuWarningThreshold = gpuWarn;
+                if (int.TryParse(TxtGpuCrit.Text, out int gpuCrit)) _currentConfig.GpuCriticalThreshold = gpuCrit;
 
                 _currentConfig.TrayCpuLabelColor = (string)BtnTrayCpuLabel.Tag;
                 _currentConfig.TrayGpuLabelColor = (string)BtnTrayGpuLabel.Tag;

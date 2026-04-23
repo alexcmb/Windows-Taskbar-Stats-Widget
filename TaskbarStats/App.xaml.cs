@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using TaskbarStats.Services;
 using System.Windows.Forms;
 using Application = System.Windows.Application;
@@ -44,9 +45,11 @@ public partial class App : Application
         _mainWindow = new MainWindow(_monitorService);
         _mainWindow.Show();
 
-        // Initialize Tray Icon
+        // Initialize Tray Icon — use the bundled monitor.ico if available, fall back to the
+        // system default so startup never throws even in unusual deployment layouts.
         _notifyIcon = new NotifyIcon();
-        _notifyIcon.Icon = SystemIcons.Application; 
+        var iconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "monitor.ico");
+        _notifyIcon.Icon = File.Exists(iconPath) ? new Icon(iconPath) : SystemIcons.Application;
         _notifyIcon.Visible = true;
         _notifyIcon.Text = "Taskbar Stats: Initializing...";
         
@@ -58,8 +61,11 @@ public partial class App : Application
 
         var toggleItem = new ToolStripMenuItem("Hide Widget", null, (s, args) => ToggleWidget());
         toggleItem.Name = "Toggle";
-        
+
+        var resetItem = new ToolStripMenuItem("Reset Position", null, (s, args) => ResetWidgetPosition());
+
         contextMenu.Items.Add(toggleItem);
+        contextMenu.Items.Add(resetItem);
         contextMenu.Items.Add("-");
         contextMenu.Items.Add("Exit", null, (s, args) => ExitApplication());
         _notifyIcon.ContextMenuStrip = contextMenu;
@@ -88,6 +94,12 @@ public partial class App : Application
         }
     }
 
+    private void ResetWidgetPosition()
+    {
+        if (_mainWindow == null) return;
+        _mainWindow.ResetPosition();
+    }
+
     private void OnServiceDataUpdated(TaskbarStats.Models.TemperatureData data)
     {
         _trayUpdateCounter++;
@@ -103,7 +115,7 @@ public partial class App : Application
     {
         if (_notifyIcon == null) return;
 
-        var config = ConfigService.Load();
+        var config = ConfigService.Current;
         Color cpuLabelColor, gpuLabelColor, textColor;
 
         try { cpuLabelColor = ColorTranslator.FromHtml(config.TrayCpuLabelColor); }
