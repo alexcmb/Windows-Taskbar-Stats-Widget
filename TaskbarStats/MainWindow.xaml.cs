@@ -79,6 +79,17 @@ public partial class MainWindow : Window
         };
     }
 
+    /// <summary>
+    /// Snaps the widget back to the default bottom-right corner of the work area.
+    /// Exposed so the tray context menu can call it.
+    /// </summary>
+    public void ResetPosition()
+    {
+        var desktop = SystemParameters.WorkArea;
+        this.Left = desktop.Right - this.Width - 10;
+        this.Top  = desktop.Bottom - this.Height - 5;
+    }
+
     private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         DragMove();
@@ -123,7 +134,7 @@ public partial class MainWindow : Window
     {
         Dispatcher.Invoke(() =>
         {
-            var config = ConfigService.Load();
+            var config = ConfigService.Current;
             
             if (data.CpuTemp.HasValue)
             {

@@ -43,6 +43,26 @@ namespace TaskbarStats.Services
             @"^#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$",
             RegexOptions.Compiled);
 
+        // In-memory config cache — avoids reading the file on every 1-second sensor tick
+        private static AppConfig? _cachedConfig;
+        private static readonly object _cacheLock = new object();
+
+        /// <summary>
+        /// Returns the cached config, loading from disk only on the first call or after
+        /// the cache has been invalidated (e.g. after a settings save).
+        /// Thread-safe — called from both the UI thread and the background sensor thread.
+        /// </summary>
+        public static AppConfig Current
+        {
+            get
+            {
+                lock (_cacheLock)
+                {
+                    return _cachedConfig ??= Load();
+                }
+            }
+        }
+
         /// <summary>
         /// Validates that a string is a valid hex color. Returns the fallback if invalid.
         /// </summary>
@@ -55,22 +75,32 @@ namespace TaskbarStats.Services
 
         public static AppConfig Load()
         {
+            AppConfig config;
             try
             {
                 if (File.Exists(ConfigPath))
                 {
                     string json = File.ReadAllText(ConfigPath);
-                    var config = JsonSerializer.Deserialize<AppConfig>(json) ?? new AppConfig();
-                    
+                    config = JsonSerializer.Deserialize<AppConfig>(json) ?? new AppConfig();
                     ValidateConfig(config);
-                    return config;
+                }
+                else
+                {
+                    config = new AppConfig();
                 }
             }
             catch (Exception)
             {
                 // Config corrupted or unreadable — return safe defaults
+                config = new AppConfig();
             }
-            return new AppConfig();
+
+            lock (_cacheLock)
+            {
+                _cachedConfig = config;
+            }
+
+            return config;
         }
 
         public static void Save(AppConfig config)
@@ -82,6 +112,13 @@ namespace TaskbarStats.Services
                 var options = new JsonSerializerOptions { WriteIndented = true };
                 string json = JsonSerializer.Serialize(config, options);
                 File.WriteAllText(ConfigPath, json);
+
+                // Update the cache so callers immediately see the new values
+                // without needing another disk read.
+                lock (_cacheLock)
+                {
+                    _cachedConfig = config;
+                }
             }
             catch (Exception)
             {
