@@ -15,10 +15,16 @@ namespace TaskbarStats
             InitializeComponent();
             _currentConfig = ConfigService.Load();
             LoadSettings();
+            // Wire after LoadSettings so the initial Value assignment doesn't
+            // fire the handler before the label element is ready.
+            SliderFontSize.ValueChanged += SliderFontSize_ValueChanged;
         }
 
         private void LoadSettings()
         {
+            SliderFontSize.Value = _currentConfig.FontSize;
+            TxtFontSizeLabel.Text = $"{_currentConfig.FontSize:0}pt";
+
             SetButtonColor(BtnBgColor, _currentConfig.BackgroundColor);
             SetButtonColor(BtnTextColor, _currentConfig.TextColor);
             
@@ -74,6 +80,11 @@ namespace TaskbarStats
             }
         }
 
+        private void SliderFontSize_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            TxtFontSizeLabel.Text = $"{(int)SliderFontSize.Value}pt";
+        }
+
         private void ColorButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is System.Windows.Controls.Button btn)
@@ -105,6 +116,8 @@ namespace TaskbarStats
         {
             try
             {
+                _currentConfig.FontSize = SliderFontSize.Value;
+
                 _currentConfig.BackgroundColor = (string)BtnBgColor.Tag;
                 _currentConfig.TextColor = (string)BtnTextColor.Tag;
                 

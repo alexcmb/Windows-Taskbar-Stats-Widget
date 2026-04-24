@@ -28,6 +28,9 @@ namespace TaskbarStats.Services
         public string TrayCpuLabelColor { get; set; } = "#FF0000"; // Red
         public string TrayGpuLabelColor { get; set; } = "#FFA500"; // Orange
         public string TrayTextColor { get; set; } = "#FFFFFF"; // White
+
+        // Widget Appearance
+        public double FontSize { get; set; } = 12; // pt, range [8, 20]
     }
 
     public static class ConfigService
@@ -133,6 +136,9 @@ namespace TaskbarStats.Services
             // Opacity
             if (config.Opacity < 0.1) config.Opacity = 0.1;
             if (config.Opacity > 1.0) config.Opacity = 1.0;
+
+            // Font size — round to nearest integer so the slider always lands on a tick
+            config.FontSize = Math.Round(Math.Clamp(config.FontSize, 8, 20));
 
             // Thresholds: clamp to sane range and ensure warning < critical
             config.CpuWarningThreshold = Math.Clamp(config.CpuWarningThreshold, 30, 120);

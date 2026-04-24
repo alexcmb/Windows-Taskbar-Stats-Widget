@@ -36,6 +36,25 @@
         </Grid.RowDefinitions>
         
         <StackPanel Grid.Row="0">
+            <GroupBox Header="Widget" Margin="0,0,0,10">
+                <StackPanel>
+                    <Grid Margin="0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Font Size:" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="TxtFontSizeLabel" Grid.Column="1"
+                                   VerticalAlignment="Center" Margin="8,0,0,0"
+                                   MinWidth="32" TextAlignment="Right"/>
+                    </Grid>
+                    <Slider x:Name="SliderFontSize"
+                            Minimum="8" Maximum="20"
+                            TickFrequency="1" IsSnapToTickEnabled="True"
+                            Margin="0,2,0,5"/>
+                </StackPanel>
+            </GroupBox>
+
             <GroupBox Header="General" Margin="0,0,0,10">
                 <StackPanel>
                     <Grid Margin="0,4">
