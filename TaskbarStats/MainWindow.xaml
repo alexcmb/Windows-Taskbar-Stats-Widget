@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskbarStats"
         mc:Ignorable="d"
-        Title="TaskbarStats" Height="30" Width="200"
+        Title="TaskbarStats"
+        SizeToContent="WidthAndHeight"
         Icon="monitor.ico"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -19,13 +20,12 @@
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
     </Window.Resources>
     <Grid>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,5">
             <TextBlock x:Name="LblCpu" Text="CPU: "/>
             <TextBlock x:Name="CpuText" Text="--"/>
             <TextBlock x:Name="UnitCpu" Text="°C" Margin="0,0,10,0"/>

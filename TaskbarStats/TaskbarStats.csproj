@@ -11,7 +11,7 @@
     <Authors>Alex</Authors>
     <Product>TaskbarStatsWidget</Product>
     <Copyright>Copyright © 2026</Copyright>
-    <Version>1.1.5</Version>
+    <Version>1.2.0</Version>
     <ApplicationIcon>monitor.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>

@@ -28,44 +28,46 @@ public partial class MainWindow : Window
         InitializeComponent();
         _service = service;
         _service.OnDataUpdated += UpdateStats;
-        
-        LoadConfig();
-        
-        // Load Config (for position and opacity)
+
+        // Load config once — pass it to LoadConfig so font/colors and
+        // position/opacity all come from the same object with no double disk read.
         var config = ConfigService.Load();
-        
-        this.Loaded += (s, e) => 
+        LoadConfig(config);
+
+        this.Loaded += (s, e) =>
         {
-             // Validate position
-             var desktop = SystemParameters.WorkArea;
-             bool isOffScreen = false;
+            // Validate position — call UpdateLayout first so SizeToContent has
+            // measured the window with the correct font size before we anchor it.
+            this.UpdateLayout();
+            var desktop = SystemParameters.WorkArea;
+            bool isOffScreen = false;
 
-             if (config.Top != -1 && config.Left != -1)
-             {
-                 // Check if the saved position is within current bounds
-                 if (config.Left > desktop.Right - 50 || config.Top > desktop.Bottom - 50 ||
-                     config.Left < desktop.Left || config.Top < desktop.Top)
-                 {
-                     isOffScreen = true;
-                 }
-                 else
-                 {
-                     this.Top = config.Top;
-                     this.Left = config.Left;
-                 }
-             }
-             else
-             {
-                 isOffScreen = true; // No config, so treat as 'reset needed'
-             }
+            if (config.Top != -1 && config.Left != -1)
+            {
+                // Check if the saved position is within current bounds
+                if (config.Left > desktop.Right - 50 || config.Top > desktop.Bottom - 50 ||
+                    config.Left < desktop.Left || config.Top < desktop.Top)
+                {
+                    isOffScreen = true;
+                }
+                else
+                {
+                    this.Top = config.Top;
+                    this.Left = config.Left;
+                }
+            }
+            else
+            {
+                isOffScreen = true; // No config, so treat as 'reset needed'
+            }
 
-             if (isOffScreen)
-             {
-                 this.Left = desktop.Right - this.Width - 10;
-                 this.Top = desktop.Bottom - this.Height - 5;
-             }
+            if (isOffScreen)
+            {
+                this.Left = desktop.Right - this.Width - 10;
+                this.Top  = desktop.Bottom - this.Height - 5;
+            }
         };
-        
+
         this.Opacity = config.Opacity;
 
         this.Closing += (s, e) => 
@@ -85,6 +87,9 @@ public partial class MainWindow : Window
     /// </summary>
     public void ResetPosition()
     {
+        // Force a layout pass so SizeToContent has updated this.Width/Height
+        // before we calculate the anchor position.
+        this.UpdateLayout();
         var desktop = SystemParameters.WorkArea;
         this.Left = desktop.Right - this.Width - 10;
         this.Top  = desktop.Bottom - this.Height - 5;
@@ -103,15 +108,26 @@ public partial class MainWindow : Window
             this.Opacity = Math.Max(0.1, this.Opacity - 0.1);
     }
 
-    public void LoadConfig()
+    // config is optional — callers that already have the object pass it in to
+    // avoid a redundant disk read; the Settings window calls with no argument.
+    public void LoadConfig(AppConfig? config = null)
     {
-        var config = ConfigService.Load();
-        
+        config ??= ConfigService.Load();
+
+        // Apply font size to all sensor text blocks so the widget auto-resizes
+        var fontSize = config.FontSize;
+        LblCpu.FontSize   = fontSize;
+        CpuText.FontSize  = fontSize;
+        UnitCpu.FontSize  = fontSize;
+        LblGpu.FontSize   = fontSize;
+        GpuText.FontSize  = fontSize;
+        UnitGpu.FontSize  = fontSize;
+
         try
         {
             var brushConverter = new BrushConverter();
             Background = (System.Windows.Media.Brush?)brushConverter.ConvertFromString(config.BackgroundColor) ?? new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xCC, 0x00, 0x00, 0x00));
-            
+
             var textBrush = (System.Windows.Media.Brush?)brushConverter.ConvertFromString(config.TextColor) ?? System.Windows.Media.Brushes.White;
             LblCpu.Foreground = textBrush;
             UnitCpu.Foreground = textBrush;
