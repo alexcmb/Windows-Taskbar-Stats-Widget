@@ -26,16 +26,17 @@ jobs:
       run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
     
     - name: Publish
-      run: >
-        dotnet publish TaskbarStats/TaskbarStats.csproj 
-          -c Release 
-          -r win-x64 
-          --self-contained true 
-          -p:PublishSingleFile=true 
-          -p:PublishReadyToRun=true 
-          -p:IncludeNativeLibrariesForSelfExtraction=true
-          -p:DebugType=none 
-          -p:Version=${{ steps.get_version.outputs.VERSION }} 
+      shell: bash
+      run: |
+          dotnet publish TaskbarStats/TaskbarStats.csproj \
+          -c Release \
+          -r win-x64 \
+          --self-contained true \
+          -p:PublishSingleFile=true \
+          -p:PublishReadyToRun=true \
+          -p:IncludeNativeLibrariesForSelfExtraction=true \
+          -p:DebugType=none \
+          -p:Version=${{ steps.get_version.outputs.VERSION }} \
           -o TaskbarStats-Release
 
     - name: Create Release
