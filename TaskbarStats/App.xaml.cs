@@ -8,6 +8,19 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace TaskbarStats;
+// Inside App.xaml.cs
+protected override void OnStartup(StartupEventArgs e)
+{
+    try 
+    {
+        base.OnStartup(e);
+    }
+    catch (Exception ex)
+    {
+        System.IO.File.WriteAllText("crash_log.txt", ex.ToString());
+        MessageBox.Show(ex.Message);
+    }
+}
 
 public partial class App : Application
 {
