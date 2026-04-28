@@ -27,9 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="monitor.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="monitor.ico" />
   </ItemGroup>
   
 </Project>

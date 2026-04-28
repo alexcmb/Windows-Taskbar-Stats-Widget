@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="TaskbarStats"
         SizeToContent="WidthAndHeight"
-        Icon="monitor.ico"
+        Icon="pack://application:,,,/monitor.ico"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="#CC000000"
