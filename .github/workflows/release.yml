@@ -24,19 +24,23 @@ jobs:
       id: get_version
       shell: bash
       run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
-
+    
     - name: Publish
-      run: |
-        dotnet publish TaskbarStats/TaskbarStats.csproj -c Release -r win-x64 --no-self-contained -p:DebugType=none -p:Version=${{ env.VERSION }} -o TaskbarStats-Release
-
-    - name: Compress Release
-      run: |
-        Compress-Archive -Path TaskbarStats-Release -DestinationPath TaskbarStats.zip
+      run: >
+        dotnet publish TaskbarStats/TaskbarStats.csproj 
+          -c Release 
+          -r win-x64 
+          --self-contained true 
+          -p:PublishSingleFile=true 
+          -p:PublishReadyToRun=true 
+          -p:IncludeNativeLibrariesForSelfExtraction=true
+          -p:DebugType=none 
+          -p:Version=${{ steps.get_version.outputs.VERSION }} 
+          -o TaskbarStats-Release
 
     - name: Create Release
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v2
       with:
-        files: TaskbarStats.zip
+          files: TaskbarStats-Release/TaskbarStats.exe
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
